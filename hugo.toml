@@ -15,7 +15,6 @@ theme = 'maintenance'
   additionalInfoText = "RenkuLab is temporarily unavailable while we perform essential maintenance and system upgrades. During this time:"
   unavailableServices = [
     "All RenkuLab services are inaccessible",
-    "Data and notebooks cannot be accessed"
   ]
   
   whatYouCanDoTitle = "What you can do"
