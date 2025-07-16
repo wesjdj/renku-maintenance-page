@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .Site.Title }} - Scheduled Maintenance</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .maintenance-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .maintenance-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #dc2626;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #f1f5f9;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-left: 4px solid #1e40af;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-box p {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .status-button {
+            display: inline-block;
+            background: #1e40af;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+        }
+
+        .status-button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(30, 64, 175, 0.4);
+        }
+
+        .footer {
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        .content {
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .content h2 {
+            color: #1e293b;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .content p {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .maintenance-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .maintenance-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="maintenance-card">
+            <div class="logo">{{ .Site.Title }}</div>
+            <div class="maintenance-icon">🔧</div>
+            <h1>{{ .Site.Params.maintenanceTitle | default "Scheduled Maintenance" }}</h1>
+            <p class="subtitle">{{ .Site.Params.maintenanceSubtitle | default "We're currently performing scheduled maintenance to improve your experience. We'll be back online shortly." }}</p>
+            
+            {{ with .Content }}
+            <div class="content">
+                {{ . }}
+            </div>
+            {{ end }}
+            
+            <div class="info-box">
+                <h3>What's happening?</h3>
+                <p>{{ .Site.Params.maintenanceWhat | default "Our team is working on system updates and improvements to provide you with better performance and new features." }}</p>
+            </div>
+            
+            <div class="info-box">
+                <h3>When will we be back?</h3>
+                <p>{{ .Site.Params.maintenanceWhen | default "We expect to complete maintenance shortly. For real-time updates on our progress, please check our status page." }}</p>
+            </div>
+            
+            {{ with .Site.Params.statusPageUrl }}
+            <a href="{{ . }}" class="status-button" target="_blank">
+                Check Statuspage
+            </a>
+            {{ end }}
+            
+            <div class="footer">
+                <p>{{ .Site.Params.footerMessage | default "Thank you for your patience. We appreciate your understanding." }}</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
