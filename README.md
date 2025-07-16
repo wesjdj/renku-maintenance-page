@@ -8,7 +8,7 @@ A Hugo-based maintenance page for RenkuLab, designed to be displayed when renkul
 - **Responsive design** - Works on desktop and mobile devices
 - **GitHub Pages deployment** - Automated deployment via GitHub Actions
 - **Easy configuration** - All content managed through `hugo.toml`
-- **Status page integration** - Links to https://renkulab.statuspage.io/
+- **Statuspage integration** - Links to https://renkulab.statuspage.io/
 
 ## Configuration
 

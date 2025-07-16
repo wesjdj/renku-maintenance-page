@@ -19,7 +19,7 @@ theme = 'maintenance'
   
   whatYouCanDoTitle = "What you can do"
   whatYouCanDo = [
-    "**Check our Statuspage** for real-time updates on maintenance progress",
+  "**Check our Statuspage** for real-time updates on maintenance progress",
     "**Plan ahead** for any critical work that may be affected"
   ]
   
