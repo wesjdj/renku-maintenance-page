@@ -57,11 +57,23 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 2rem;
             text-align: center;
             width: 100%;
+        }
+
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1000px;
+            }
+        }
+
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 1200px;
+            }
         }
 
         .maintenance-card {
@@ -70,6 +82,18 @@
             padding: 3rem 2rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             backdrop-filter: blur(10px);
+        }
+
+        @media (min-width: 768px) {
+            .maintenance-card {
+                padding: 4rem 3rem;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .maintenance-card {
+                padding: 4rem 4rem;
+            }
         }
 
         .logo-section {
