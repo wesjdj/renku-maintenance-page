@@ -96,8 +96,22 @@
             </div>
         </div>
         <div class="maintenance-icon">🔧</div>
-        <h1>{{ .Site.Params.maintenanceTitle | default "Scheduled Maintenance" }}</h1>
-        <p class="subtitle">{{ .Site.Params.maintenanceSubtitle | default "We're currently performing scheduled maintenance to improve your experience. We'll be back online shortly." }}</p>
+        <h1 class="maintenance-title">{{ .Site.Params.maintenanceTitle | default "Scheduled Maintenance" }}</h1>
+        <p class="subtitle maintenance-description">{{ .Site.Params.maintenanceSubtitle | default "We're currently performing scheduled maintenance to improve your experience. We'll be back online shortly." }}</p>
+        
+        <!-- Dynamic status indicator -->
+        <div class="status-indicator-container">
+            <span id="status-indicator" class="status-indicator" style="display: none;"></span>
+        </div>
+        
+        <!-- Statuspage button -->
+        {{ with .Site.Params.statusPageUrl }}
+        <div style="margin: 1.5rem 0;">
+            <a href="{{ . }}" class="status-button" target="_blank">
+                Check Statuspage
+            </a>
+        </div>
+        {{ end }}
         
         {{ with .Content }}
         <div class="content">
@@ -147,13 +161,16 @@
         <div class="info-box">
             <h3>When will we be back?</h3>
             <p>{{ .Site.Params.maintenanceWhen | default "We expect to complete maintenance shortly. For real-time updates on our progress, please check our status page." }}</p>
+            <div class="maintenance-timing"></div>
         </div>
         
-        {{ with .Site.Params.statusPageUrl }}
-        <a href="{{ . }}" class="status-button" target="_blank">
-            Check Statuspage
-        </a>
-        {{ end }}
+        <!-- Dynamic maintenance details -->
+        <div class="info-box" id="maintenance-details" style="display: none;">
+            <h3>Live Maintenance Status</h3>
+            <div class="affected-components"></div>
+            <div class="maintenance-updates"></div>
+        </div>
+        
         
         <div class="footer">
             <p>{{ .Site.Params.footerMessage | default "Thank you for your patience. We appreciate your understanding." }}</p>

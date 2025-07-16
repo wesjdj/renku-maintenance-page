@@ -211,6 +211,73 @@
             margin-bottom: 0.5rem;
         }
 
+        .status-indicator-container {
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #f7fafc;
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .status-indicator.none {
+            background: #f0fff4;
+            color: #22543d;
+            border-color: #68d391;
+        }
+        
+        .status-indicator.maintenance {
+            background: #fffbeb;
+            color: #c05621;
+            border-color: #f6ad55;
+        }
+        
+        .status-indicator.minor {
+            background: #fefcbf;
+            color: #c6a300;
+            border-color: #f6e05e;
+        }
+        
+        .status-indicator.major {
+            background: #fed7d7;
+            color: #c53030;
+            border-color: #fc8181;
+        }
+        
+        .status-indicator.critical {
+            background: #fed7d7;
+            color: #742a2a;
+            border-color: #e53e3e;
+        }
+        
+        .maintenance-timing {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        
+        .affected-components {
+            margin-top: 1rem;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            color: #495057;
+        }
+        
+        .maintenance-updates {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
         @media (max-width: 640px) {
             .container {
                 padding: 1rem;
@@ -233,6 +300,128 @@
             }
         }
     </style>
+    <script>
+        // Statuspage API integration
+        async function fetchMaintenanceStatus() {
+            const statusPageId = '{{ .Site.Params.statusPageId | default "renkulab" }}';
+            const baseUrl = `https://${statusPageId}.statuspage.io/api/v2`;
+            
+            try {
+                // Fetch both summary and scheduled maintenances
+                const [summaryResponse, scheduledResponse] = await Promise.all([
+                    fetch(`${baseUrl}/summary.json`),
+                    fetch(`${baseUrl}/scheduled-maintenances/active.json`)
+                ]);
+                
+                if (!summaryResponse.ok || !scheduledResponse.ok) {
+                    throw new Error('API request failed');
+                }
+                
+                const summaryData = await summaryResponse.json();
+                const scheduledData = await scheduledResponse.json();
+                
+                updateMaintenanceInfo(summaryData, scheduledData);
+                
+            } catch (error) {
+                console.warn('Could not fetch maintenance status:', error);
+                // Fallback to static content - no changes needed
+            }
+        }
+        
+        function updateMaintenanceInfo(summary, scheduled) {
+            const maintenanceDetailsEl = document.getElementById('maintenance-details');
+            const statusIndicator = document.getElementById('status-indicator');
+            
+            // Update overall status - hide if all systems operational
+            if (summary.status && summary.status.indicator) {
+                if (statusIndicator) {
+                    if (summary.status.indicator === 'none') {
+                        // Hide status indicator for "All systems operational"
+                        statusIndicator.style.display = 'none';
+                    } else {
+                        statusIndicator.textContent = getStatusText(summary.status.indicator);
+                        statusIndicator.className = `status-indicator ${summary.status.indicator}`;
+                        statusIndicator.style.display = 'inline-block';
+                    }
+                }
+            }
+            
+            // Update maintenance details if there are active maintenances
+            if (scheduled.scheduled_maintenances && scheduled.scheduled_maintenances.length > 0) {
+                const maintenance = scheduled.scheduled_maintenances[0]; // Get the first active maintenance
+                
+                // Update maintenance title and description
+                const titleEl = document.querySelector('.maintenance-title');
+                const descriptionEl = document.querySelector('.maintenance-description');
+                
+                if (titleEl && maintenance.name) {
+                    titleEl.textContent = maintenance.name;
+                }
+                
+                if (descriptionEl && maintenance.body) {
+                    descriptionEl.textContent = maintenance.body;
+                }
+                
+                // Update timing information
+                const timingEl = document.querySelector('.maintenance-timing');
+                if (timingEl && maintenance.scheduled_for && maintenance.scheduled_until) {
+                    const startTime = new Date(maintenance.scheduled_for);
+                    const endTime = new Date(maintenance.scheduled_until);
+                    
+                    timingEl.innerHTML = `
+                        <strong>Scheduled:</strong> ${formatDateTime(startTime)} - ${formatDateTime(endTime)}
+                    `;
+                    timingEl.style.display = 'block';
+                }
+                
+                // Update affected components
+                if (maintenance.components && maintenance.components.length > 0) {
+                    const componentsEl = document.querySelector('.affected-components');
+                    if (componentsEl) {
+                        const componentList = maintenance.components.map(comp => comp.name).join(', ');
+                        componentsEl.innerHTML = `<strong>Affected services:</strong> ${componentList}`;
+                    }
+                }
+                
+                // Show the dynamic maintenance details section
+                if (maintenanceDetailsEl) {
+                    maintenanceDetailsEl.style.display = 'block';
+                }
+            } else {
+                // Hide the dynamic maintenance details section if no active maintenance
+                if (maintenanceDetailsEl) {
+                    maintenanceDetailsEl.style.display = 'none';
+                }
+            }
+        }
+        
+        function getStatusText(indicator) {
+            const statusMap = {
+                'none': 'All systems operational',
+                'minor': 'Minor issues detected',
+                'major': 'Major service disruption',
+                'critical': 'Critical service outage',
+                'maintenance': 'Scheduled maintenance in progress'
+            };
+            return statusMap[indicator] || 'Status unknown';
+        }
+        
+        function formatDateTime(date) {
+            return date.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            });
+        }
+        
+        // Fetch status on page load
+        document.addEventListener('DOMContentLoaded', fetchMaintenanceStatus);
+        
+        // Auto-refresh every 5 minutes
+        setInterval(fetchMaintenanceStatus, 5 * 60 * 1000);
+    </script>
 </head>
 <body>
     <div class="background-dots">
