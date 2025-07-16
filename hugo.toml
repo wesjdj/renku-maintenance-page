@@ -7,14 +7,14 @@ theme = 'maintenance'
   maintenanceTitle = "Scheduled Maintenance"
   maintenanceSubtitle = "We're currently performing scheduled maintenance to improve your experience. We'll be back online shortly."
   maintenanceWhat = "Our team is working on system updates and improvements to provide you with better performance and new features."
-  maintenanceWhen = "We expect to complete maintenance shortly. For real-time updates on our progress, please check our status page."
+  maintenanceWhen = "We expect to complete maintenance shortly. For real-time updates on our progress, please check our Statuspage."
   statusPageUrl = "https://renkulab.statuspage.io/"
   footerMessage = "Thank you for your patience. We appreciate your understanding."
   
   additionalInfoTitle = "Additional Information"
   additionalInfoText = "RenkuLab is temporarily unavailable while we perform essential maintenance and system upgrades. During this time:"
   unavailableServices = [
-    "All RenkuLab services are inaccessible",
+    "All RenkuLab services are inaccessible"
   ]
   
   whatYouCanDoTitle = "What you can do"
