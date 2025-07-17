@@ -1,4 +1,4 @@
-baseURL = 'https://wesjdj.github.io/renku-maintenance-page'
+baseURL = 'https://swissdatasciencecenter.github.io/renku-maintenance-page/'
 languageCode = 'en-us'
 title = 'RenkuLab'
 theme = 'maintenance'
